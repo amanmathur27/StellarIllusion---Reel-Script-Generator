@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Copy, Wand2, Sparkles, Volume2, Video, Clock, AlertCircle, Layers, FileText, Hash, Share2 } from 'lucide-react';
+import { useState } from 'react';
+import { Copy, Wand2, Sparkles, Volume2, Video, Clock, AlertCircle, Layers, FileText, Share2, ExternalLink } from 'lucide-react';
 
 // --- API CONFIGURATION ---
 // const API_KEY = ""; // The environment will inject the key automatically
@@ -351,6 +351,21 @@ export default function ViralReelArchitect() {
 
           </div>
         )}
+
+        {/* CTA Section */}
+        <div className="mt-16 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-slate-800 rounded-3xl p-8 text-center">
+          <h3 className="text-2xl font-bold text-white mb-3">Explore More on Stellar Illusion</h3>
+          <p className="text-slate-400 mb-6">Discover interactive simulators, quizzes, and cosmic content on our main platform</p>
+          <a 
+            href="https://www.stellarillusion.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-purple-500/25"
+          >
+            Visit Stellar Illusion
+            <ExternalLink className="w-5 h-5" />
+          </a>
+        </div>
       </div>
     </div>
   );
