@@ -2,11 +2,13 @@ import { useState } from 'react';
 import App from './App';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import { Menu, X, Sparkles, ExternalLink } from 'lucide-react';
+import Footer from './components/Footer';
+import { Menu, X, Sparkles, ExternalLink, History } from 'lucide-react';
 
 export default function AppRouter() {
   const [currentPage, setCurrentPage] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   const navigation = [
     { name: 'Home', id: 'home' },
@@ -21,6 +23,66 @@ export default function AppRouter() {
 
   return (
     <div className="min-h-screen bg-slate-950">
+      {/* Mobile Menu Overlay Backdrop */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-[55] bg-black/50 md:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Navigation Menu (Slides from Right) */}
+      <div className={`fixed inset-y-0 right-0 z-[60] w-64 bg-slate-900 border-l border-slate-800 transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} md:hidden flex flex-col`}>
+        <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+          <span className="font-bold text-purple-400">Menu</span>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-2 -mr-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+            aria-label="Close menu"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          {navigation.map(item => (
+            <button
+              key={item.id}
+              onClick={() => handleNavClick(item.id)}
+              className={`block w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
+                currentPage === item.id
+                  ? 'bg-purple-500/20 text-purple-400'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
+            >
+              {item.name}
+            </button>
+          ))}
+          
+          {/* History Toggle Button (Mobile) */}
+          <button
+            onClick={() => {
+              setShowHistory(!showHistory);
+              setMobileMenuOpen(false);
+            }}
+            className="flex items-center gap-2 w-full text-left px-4 py-3 rounded-lg font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800"
+          >
+            <History className="w-4 h-4" />
+            <span>History</span>
+          </button>
+
+          <a
+            href="https://www.stellarillusion.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all mt-4"
+          >
+            Visit Main Site
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+
       {/* Premium Header */}
       <header className="sticky top-0 z-50 bg-gradient-to-b from-slate-950 via-slate-950/95 to-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -64,8 +126,16 @@ export default function AppRouter() {
               ))}
             </div>
 
-            {/* Desktop CTA Button */}
+            {/* Desktop CTA & History Button */}
             <div className="hidden md:flex items-center gap-4">
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all duration-300"
+                aria-label="Toggle history"
+              >
+                <History className="w-4 h-4" />
+                <span className="text-sm font-medium">History</span>
+              </button>
               <a
                 href="https://www.stellarillusion.com"
                 target="_blank"
@@ -80,99 +150,23 @@ export default function AppRouter() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-slate-400 hover:text-white transition-colors"
+              className="md:hidden p-2 -mr-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+              aria-label="Open menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-
-          {/* Mobile Navigation */}
-          {mobileMenuOpen && (
-            <div className="md:hidden mt-4 space-y-2 pb-4 border-t border-slate-800 pt-4">
-              {navigation.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`block w-full text-left px-4 py-2 rounded-lg font-medium transition-colors ${
-                    currentPage === item.id
-                      ? 'bg-purple-500/20 text-purple-400'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-900'
-                  }`}
-                >
-                  {item.name}
-                </button>
-              ))}
-              <a
-                href="https://www.stellarillusion.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all mt-2"
-              >
-                Visit Main Site
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-          )}
         </div>
       </header>
 
       {/* Page Content */}
       <div>
-        {currentPage === 'home' && <App />}
+        {currentPage === 'home' && <App showHistory={showHistory} setShowHistory={setShowHistory} />}
         {currentPage === 'about' && <About />}
         {currentPage === 'contact' && <Contact />}
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-b from-slate-900/50 to-slate-950 border-t border-slate-800 mt-16">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="font-bold text-white mb-4 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-purple-400" />
-                Stellar Illusion
-              </h3>
-              <p className="text-slate-400 text-sm">Viral Reel Generator - Create stunning cosmic content with AI</p>
-              <a
-                href="https://www.stellarillusion.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-4 text-purple-400 hover:text-purple-300 transition-colors text-sm font-medium"
-              >
-                Visit Main Site
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Navigation</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><button onClick={() => handleNavClick('home')} className="hover:text-purple-400 transition-colors">Home</button></li>
-                <li><button onClick={() => handleNavClick('about')} className="hover:text-purple-400 transition-colors">About</button></li>
-                <li><button onClick={() => handleNavClick('contact')} className="hover:text-purple-400 transition-colors">Contact</button></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Stellar Illusion</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="https://www.stellarillusion.com/blog" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Blog</a></li>
-                <li><a href="https://www.stellarillusion.com/solar-system-quiz" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Quizzes</a></li>
-                <li><a href="https://www.stellarillusion.com/gravity-simulator" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Simulators</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-white mb-4">Connect</h4>
-              <ul className="space-y-2 text-slate-400 text-sm">
-                <li><a href="https://www.instagram.com/stellar__illusion/" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Instagram</a></li>
-                <li><a href="https://www.facebook.com/stellarillusion" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">Facebook</a></li>
-                <li><a href="https://www.youtube.com/@FreakyAstrophile" target="_blank" rel="noopener noreferrer" className="hover:text-purple-400 transition-colors">YouTube</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 pt-8 text-center text-slate-500 text-sm">
-            <p>&copy; 2024 Stellar Illusion - Viral Reel Generator. All rights reserved. Developed by Aman Mathur</p>
-          </div>
-        </div>
-      </footer>
+      <Footer onNavClick={handleNavClick} />
     </div>
   );
 }

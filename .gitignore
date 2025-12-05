@@ -1,4 +1,19 @@
-# Logs
+# ============================================
+# ENVIRONMENT VARIABLES - CRITICAL SECURITY
+# ============================================
+# NEVER commit .env files containing API keys, secrets, or credentials
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+.env.test.local
+.env.*.example
+.env.backup
+
+# ============================================
+# LOGS
+# ============================================
 logs
 *.log
 npm-debug.log*
@@ -7,25 +22,26 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies
+# ============================================
+# DEPENDENCIES
+# ============================================
 node_modules
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
 
-# Build output
+# ============================================
+# BUILD OUTPUT
+# ============================================
 dist
 dist-ssr
 *.local
+build
+out
 
-# Environment variables (NEVER commit these)
-.env
-.env.local
-.env.*.local
-.env.production.local
-.env.development.local
-.env.test.local
-
-# Editor directories and files
+# ============================================
+# EDITOR & IDE
+# ============================================
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -35,24 +51,77 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# OS files
-Thumbs.db
-.DS_Store
-
-# IDE
-.vscode
-.idea
 *.swp
 *.swo
 *~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# Testing
+# ============================================
+# OS FILES
+# ============================================
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# ============================================
+# IDE SPECIFIC
+# ============================================
+.vscode
+.idea
+.fleet
+.gradle
+.gradle/
+
+# ============================================
+# TESTING
+# ============================================
 coverage
 .nyc_output
+.coverage
+htmlcov
 
-# Misc
+# ============================================
+# CACHE & TEMP
+# ============================================
 .cache
 .parcel-cache
 .next
-out
+.nuxt
+dist
+.cache/
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vscode-test
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# ============================================
+# MISC
+# ============================================
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+.env.*.local
+config/secrets.json
+secrets.json
+private/
+.firebase/
+.firebaserc
